@@ -14,12 +14,19 @@ public class GameManager : MonoBehaviour
     public GameObject blockPrefab;
 
     //점수 관련
+    public GameObject scorePanel;
     public GameObject[] numberImg;
     public Sprite[] number;
 
+    //게임 시작 관련
+    public GameObject startPanel;
+    public GameObject player;
+
     private void Start()
     {
-        StartCoroutine(MakeBlock());
+        Time.timeScale = 0; //시간이 흐르지 않는다 (1이면 정상속도, 2이면 모든 움직임이 2배속)
+        DataManager.Instance.isGameOver = true; //true로 해서 블럭, 바닥 등 움직이지 않도록
+        scorePanel.SetActive(false);
     }
 
     private void Update()
@@ -32,6 +39,22 @@ public class GameManager : MonoBehaviour
         int digitSpace = DataManager.Instance.score % 10;
         numberImg[1].GetComponent<Image>().sprite = number[digitSpace];
     }
+
+    public void StartBtn()
+    {
+        Time.timeScale = 1;
+        player.SetActive(true);
+        DataManager.Instance.isGameOver = false;
+
+        startPanel.SetActive(false);
+    }
+
+    public void StartGame()
+    {
+        scorePanel.SetActive(true);
+        StartCoroutine(MakeBlock());
+    }
+
 
     IEnumerator MakeBlock()
     {

@@ -6,6 +6,7 @@ public class FloorMove : MonoBehaviour
 {
     public GameObject backFloor;
 
+
     private void Update()
     {
         if (!DataManager.Instance.isGameOver)

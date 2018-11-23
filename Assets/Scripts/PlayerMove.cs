@@ -15,24 +15,70 @@ public class PlayerMove : MonoBehaviour
     public float jumpPower = 5f;
     public float smooth = 2.0f;
 
+    //준비 자세 관련
+    public Sprite spriteIdle;
+    public RuntimeAnimatorController animController;
+
+    public GameObject gameManager;
+
+    private bool isClickMouseLeft = false;
+
+    private int flag = 1; //위, 아래 flag
+    private float speed = 0.4f; //왔다갔다 속도
+
+
     private void Start()
     {
-        anim = gameObject.GetComponent<Animator>();
+        transform.position = new Vector3(-0.46f, 1.8f, 0);
         spriteR = gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
-        if (!DataManager.Instance.isGameOver)
+        if (!isClickMouseLeft)
         {
-            if (Input.GetMouseButtonDown(0)) //마우스 왼쪽 버튼을 누르면 y축 방향으로 올라감
+            if (!DataManager.Instance.isGameOver)
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector3(0, jumpPower, 0);
-                transform.rotation = Quaternion.Euler(0, 0, 60f);
+                if (Input.GetMouseButton(0))
+                {
+                    isClickMouseLeft = true;
+
+                    //애니메이터 및 컨트롤러 추가
+                    gameObject.AddComponent<Animator>();
+                    anim = gameObject.GetComponent<Animator>();
+                    anim.runtimeAnimatorController = animController;
+
+                    //중력 크기 지정
+                    gameObject.GetComponent<Rigidbody2D>().gravityScale = 1;
+
+                    //블럭 생성 시작하기
+                    gameManager.GetComponent<GameManager>().StartGame();
+                }
             }
 
-            Quaternion target = Quaternion.Euler(0, 0, -90f);
-            transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth); //Slerp: 구면 선형 보간법(spherical linear interpolation)의 약어
+            //애니메이션 없음, idle 스프라이트, 중력없이 위아래로 두둥실
+            if (transform.position.y > 2f)
+                flag = -1;
+            else if (transform.position.y <= 1.7f)
+                flag = 1;
+
+            transform.Translate(speed * flag * Vector3.up * Time.deltaTime);
+
+
+        }
+        else
+        {
+            if (!DataManager.Instance.isGameOver)
+            {
+                if (Input.GetMouseButtonDown(0)) //마우스 왼쪽 버튼을 누르면 y축 방향으로 올라감
+                {
+                    GetComponent<Rigidbody2D>().velocity = new Vector3(0, jumpPower, 0);
+                    transform.rotation = Quaternion.Euler(0, 0, 60f);
+                }
+
+                Quaternion target = Quaternion.Euler(0, 0, -90f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth); //Slerp: 구면 선형 보간법(spherical linear interpolation)의 약어
+            }
         }
     }
 
@@ -40,6 +86,7 @@ public class PlayerMove : MonoBehaviour
     {
         //게임오버
         DataManager.Instance.isGameOver = true;
+
         Destroy(anim);
 
         if (collision.gameObject.CompareTag("Block"))

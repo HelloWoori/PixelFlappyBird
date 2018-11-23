@@ -6,6 +6,7 @@ public class DataManager : MonoBehaviour
 {
     private static DataManager _instance;
 
+
     public static DataManager Instance
     {
         get
@@ -27,8 +28,9 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public bool isGameOver = false;
+    public bool isGameOver = true;
     public int score = 0;
 
+    //블럭, 바닥 움직임 속도
     public float moveSpeed = 3f;
 }
