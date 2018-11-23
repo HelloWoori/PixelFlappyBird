@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class GameManager : MonoBehaviour
         numberImg[1].GetComponent<Image>().sprite = number[digitSpace];
     }
 
+    //게임 시작
     public void StartBtn()
     {
         Time.timeScale = 1;
@@ -49,12 +51,19 @@ public class GameManager : MonoBehaviour
         startPanel.SetActive(false);
     }
 
+    //게임 재시작 버튼
+    public void ReStartBtn()
+    {
+        DataManager.Instance.isGameOver = false;
+        DataManager.Instance.score = 0;
+        SceneManager.LoadScene("Main");
+    }
+
     public void StartGame()
     {
         scorePanel.SetActive(true);
         StartCoroutine(MakeBlock());
     }
-
 
     IEnumerator MakeBlock()
     {

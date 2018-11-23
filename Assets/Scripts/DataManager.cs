@@ -30,6 +30,7 @@ public class DataManager : MonoBehaviour
 
     public bool isGameOver = true;
     public int score = 0;
+    public int bestScore = 0;
 
     //블럭, 바닥 움직임 속도
     public float moveSpeed = 3f;

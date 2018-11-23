@@ -15,6 +15,8 @@ public class PlayerMove : MonoBehaviour
     public float jumpPower = 5f;
     public float smooth = 2.0f;
 
+    public GameObject endPanel; //게임 종료시 출력되는 패널
+
     //준비 자세 관련
     public Sprite spriteIdle;
     public RuntimeAnimatorController animController;
@@ -91,6 +93,8 @@ public class PlayerMove : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Block"))
         {
+            //TODO: 부딪혔을 때 '꽝'스프라이트 출력하기
+
             //위 아래 블럭의 강체 제거
             DestroyRigidBody2DForBlock();
 
@@ -114,6 +118,8 @@ public class PlayerMove : MonoBehaviour
             //'깨꼬닥' 스프라이트
             spriteR.sprite = spriteDie;
             transform.rotation = Quaternion.Euler(0, 0, -90f);
+
+            StartEndPanel();
         }
     }
 
@@ -125,6 +131,8 @@ public class PlayerMove : MonoBehaviour
             transform.position.x,
             Mathf.Lerp(transform.position.y, -2f, Time.deltaTime * smooth),
             0);
+
+        StartEndPanel();
     }
 
     void DestroyRigidBody2DForBlock()
@@ -134,6 +142,12 @@ public class PlayerMove : MonoBehaviour
         {
             Destroy(blocks[i].GetComponent<BoxCollider2D>());
         }
+    }
+
+    void StartEndPanel()
+    {
+        endPanel.SetActive(true); //endPanel 출력
+        //TODO: startPanel은 안보이고, 바로 시작하게끔!!
     }
 
     IEnumerator ChangeDieSprite()
