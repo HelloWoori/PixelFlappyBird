@@ -8,7 +8,7 @@ public class FloorMove : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.isGameOver)
+        if (!DataManager.Instance.isGameOver)
         {
             if (transform.position.x <= -15f)
             {

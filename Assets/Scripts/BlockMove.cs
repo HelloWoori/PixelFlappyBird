@@ -6,7 +6,7 @@ public class BlockMove : MonoBehaviour
 {
     private void Update()
     {
-        if (!GameManager.isGameOver)
+        if (!DataManager.Instance.isGameOver)
         {
             transform.Translate(-1 * DataManager.Instance.moveSpeed * Time.deltaTime, 0, 0);
 

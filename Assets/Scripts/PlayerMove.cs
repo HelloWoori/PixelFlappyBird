@@ -23,7 +23,7 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.isGameOver)
+        if (!DataManager.Instance.isGameOver)
         {
             if (Input.GetMouseButtonDown(0)) //마우스 왼쪽 버튼을 누르면 y축 방향으로 올라감
             {
@@ -39,7 +39,7 @@ public class PlayerMove : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //게임오버
-        GameManager.isGameOver = true;
+        DataManager.Instance.isGameOver = true;
         Destroy(anim);
 
         if (collision.gameObject.CompareTag("Block"))

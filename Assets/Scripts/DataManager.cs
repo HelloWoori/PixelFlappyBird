@@ -27,5 +27,8 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    public bool isGameOver = false;
+    public int score = 0;
+
     public float moveSpeed = 3f;
 }
