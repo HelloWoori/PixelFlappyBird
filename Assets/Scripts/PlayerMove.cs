@@ -17,7 +17,10 @@ public class PlayerMove : MonoBehaviour
 
     public GameObject hurtEffect;
     private bool isUsedHurtEffect = false;
+
+    public GameObject flashPanel; //번쩍하는 패널
     public GameObject endPanel; //게임 종료시 출력되는 패널
+    private bool isShowEndPanel = false;
 
     //준비 자세 관련
     public Sprite spriteIdle;
@@ -88,6 +91,13 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!isShowEndPanel)
+        {
+            isShowEndPanel = true;
+            flashPanel.SetActive(true); //flashPanel출력
+            StartCoroutine(HideFlashPanel());
+        }
+
         //게임오버
         DataManager.Instance.isGameOver = true;
 
@@ -102,7 +112,7 @@ public class PlayerMove : MonoBehaviour
 
                 hurtEffect.transform.position = collision.contacts[0].point;
                 hurtEffect.SetActive(true);
-                StartCoroutine(ChangeVisiable());
+                StartCoroutine(HideHurtEffect());
             }
 
             //위 아래 블럭의 강체 제거
@@ -129,7 +139,7 @@ public class PlayerMove : MonoBehaviour
             spriteR.sprite = spriteDie;
             transform.rotation = Quaternion.Euler(0, 0, -90f);
 
-            StartEndPanel();
+            StartCoroutine(ShowEndPanel());
         }
     }
 
@@ -142,7 +152,7 @@ public class PlayerMove : MonoBehaviour
             Mathf.Lerp(transform.position.y, -2f, Time.deltaTime * smooth),
             0);
 
-        StartEndPanel();
+        StartCoroutine(ShowEndPanel());
     }
 
     void DestroyRigidBody2DForBlock()
@@ -154,12 +164,6 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    void StartEndPanel()
-    {
-        endPanel.SetActive(true); //endPanel 출력
-        //TODO: startPanel은 안보이고, 바로 시작하게끔!!
-    }
-
     IEnumerator ChangeDieSprite()
     {
         yield return new WaitForSeconds(1f);
@@ -169,10 +173,24 @@ public class PlayerMove : MonoBehaviour
         DriveIntoGround();
     }
 
-    IEnumerator ChangeVisiable()
+    IEnumerator HideHurtEffect()
     {
         yield return new WaitForSeconds(0.2f);
 
         hurtEffect.SetActive(false);
+    }
+
+    IEnumerator HideFlashPanel()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        flashPanel.SetActive(false);
+    }
+
+    IEnumerator ShowEndPanel()
+    {
+        yield return new WaitForSeconds(0.25f);
+
+        endPanel.SetActive(true);
     }
 }
