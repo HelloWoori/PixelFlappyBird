@@ -15,6 +15,8 @@ public class PlayerMove : MonoBehaviour
     public float jumpPower = 5f;
     public float smooth = 2.0f;
 
+    public GameObject spriteHurtEffect;
+    private bool isUsedHurtEffect = false;
     public GameObject endPanel; //게임 종료시 출력되는 패널
 
     //준비 자세 관련
@@ -93,7 +95,15 @@ public class PlayerMove : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Block"))
         {
-            //TODO: 부딪혔을 때 '꽝'스프라이트 출력하기
+            //부딪혔을 때 '꽝'스프라이트 출력하기
+            if (!isUsedHurtEffect)
+            {
+                isUsedHurtEffect = true;
+
+                spriteHurtEffect.transform.position = collision.contacts[0].point;
+                spriteHurtEffect.SetActive(true);
+                StartCoroutine(ChangeVisiable());
+            }
 
             //위 아래 블럭의 강체 제거
             DestroyRigidBody2DForBlock();
@@ -157,5 +167,12 @@ public class PlayerMove : MonoBehaviour
         //'깨꼬닥' 스프라이트
         spriteR.sprite = spriteDie;
         DriveIntoGround();
+    }
+
+    IEnumerator ChangeVisiable()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        spriteHurtEffect.SetActive(false);
     }
 }
