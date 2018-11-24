@@ -26,10 +26,21 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //Time.timeScale = 0; //시간이 흐르지 않는다 (1이면 정상속도, 2이면 모든 움직임이 2배속)
-        DataManager.Instance.isGameOver = true; //true로 해서 블럭, 바닥 등 움직이지 않도록
-        scorePanel.SetActive(false);
-        StartCoroutine(ShowTab());
+        if (!DataManager.Instance.isRestart)
+        {
+            DataManager.Instance.isGameOver = true; //true로 해서 블럭, 바닥 등 움직이지 않도록
+            //Time.timeScale = 0; //시간이 흐르지 않는다 (1이면 정상속도, 2이면 모든 움직임이 2배속)
+
+            startPanel.SetActive(true);
+            scorePanel.SetActive(false);
+      
+            tap.SetActive(true);
+            StartCoroutine(ShowTab());
+        }
+        else
+        {
+            StartBtn();
+        }
     }
 
     private void Update()
@@ -61,6 +72,8 @@ public class GameManager : MonoBehaviour
     {
         DataManager.Instance.isGameOver = false;
         DataManager.Instance.score = 0;
+        DataManager.Instance.isRestart = true;
+
         SceneManager.LoadScene("Main");
     }
 

@@ -9715,6 +9715,7 @@ MonoBehaviour:
   score: 0
   bestScore: 0
   moveSpeed: 3
+  isRestart: 0
 --- !u!1 &2042037939
 GameObject:
   m_ObjectHideFlags: 0
