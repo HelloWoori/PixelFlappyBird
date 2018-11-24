@@ -26,9 +26,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //재시작인 경우, 튜토리얼 생략 후 바로 게임 시작
         if (!DataManager.Instance.isRestart)
         {
+            SoundManager.Instance.PlaySound("LongBGM");
             DataManager.Instance.isGameOver = true; //true로 해서 블럭, 바닥 등 움직이지 않도록
             //Time.timeScale = 0; //시간이 흐르지 않는다 (1이면 정상속도, 2이면 모든 움직임이 2배속)
 
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
             tap.SetActive(true);
             StartCoroutine(ShowTab());
         }
-        else
+        else //재시작인 경우, 튜토리얼 생략 후 바로 게임 시작
         {
             StartBtn();
         }
@@ -58,6 +58,9 @@ public class GameManager : MonoBehaviour
     //게임 시작
     public void StartBtn()
     {
+        SoundManager.Instance.StopSound("LongBGM");
+        StartCoroutine(PlayBGM());
+
         Time.timeScale = 1;
         player.SetActive(true);
         DataManager.Instance.isGameOver = false;
@@ -68,9 +71,17 @@ public class GameManager : MonoBehaviour
         tap.SetActive(false);
     }
 
+    public void StartBtnWithPlayBtnSound()
+    {
+        SoundManager.Instance.PlaySound("Btn");
+        StartBtn();
+    }
+
     //게임 재시작 버튼
     public void ReStartBtn()
     {
+        SoundManager.Instance.PlaySound("Btn");
+
         DataManager.Instance.isGameOver = false;
         DataManager.Instance.score = 0;
         DataManager.Instance.isRestart = true;
@@ -115,4 +126,10 @@ public class GameManager : MonoBehaviour
         } while (true);
     }
 
+    IEnumerator PlayBGM()
+    {
+        yield return new WaitForSeconds(1f);
+
+        SoundManager.Instance.PlaySound("ShortBGM");
+    }
 }

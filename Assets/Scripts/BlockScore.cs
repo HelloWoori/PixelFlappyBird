@@ -8,6 +8,7 @@ public class BlockScore : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            SoundManager.Instance.PlaySound("Score");
             DataManager.Instance.score += 1;
         }
     }

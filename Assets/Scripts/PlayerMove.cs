@@ -77,6 +77,8 @@ public class PlayerMove : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(0)) //마우스 왼쪽 버튼을 누르면 y축 방향으로 올라감
                 {
+                    SoundManager.Instance.PlaySound("Flap");
+
                     GetComponent<Rigidbody2D>().velocity = new Vector3(0, jumpPower, 0);
                     transform.rotation = Quaternion.Euler(0, 0, 60f);
                 }
@@ -92,6 +94,7 @@ public class PlayerMove : MonoBehaviour
         //번쩍이는 패널은 딱 한 번만 보여줌
         if (!isShowEndPanel)
         {
+            SoundManager.Instance.StopSound("ShortBGM");
             isShowEndPanel = true;
             flashPanel.SetActive(true); //flashPanel출력
             StartCoroutine(HideFlashPanel());
@@ -110,6 +113,9 @@ public class PlayerMove : MonoBehaviour
             {
                 isUsedHurtEffect = true;
 
+                SoundManager.Instance.PlaySound("Hurt");
+                StartCoroutine(PlaySoundFall());
+
                 hurtEffect.transform.position = collision.contacts[0].point;
                 hurtEffect.SetActive(true);
                 StartCoroutine(HideHurtEffect());
@@ -127,12 +133,16 @@ public class PlayerMove : MonoBehaviour
                 Mathf.Lerp(transform.position.y, transform.position.y + 8f, Time.deltaTime * smooth),
                 0);
 
+            StartCoroutine(PlaySoundFall());
+
             //일정시간 뒤 '깨꼬닥' 스프라이트
             StartCoroutine(ChangeDieSprite());
         }
 
         if (collision.gameObject.CompareTag("Floor"))
         {
+            SoundManager.Instance.PlaySound("Hurt");
+
             Destroy(gameObject.GetComponent<Rigidbody2D>());
 
             //'깨꼬닥' 스프라이트
@@ -151,8 +161,6 @@ public class PlayerMove : MonoBehaviour
             transform.position.x,
             Mathf.Lerp(transform.position.y, -2f, Time.deltaTime * smooth),
             0);
-
-        StartCoroutine(ShowEndPanel());
     }
 
     void DestroyRigidBody2DForBlock()
@@ -167,7 +175,7 @@ public class PlayerMove : MonoBehaviour
     //코루틴 ---------------------------------------------------
     IEnumerator ChangeDieSprite()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.6f);
 
         //'깨꼬닥' 스프라이트
         spriteR.sprite = spriteDie;
@@ -192,6 +200,14 @@ public class PlayerMove : MonoBehaviour
     {
         yield return new WaitForSeconds(0.25f);
 
+        SoundManager.Instance.PlaySound("GameOver");
         endPanel.SetActive(true);
+    }
+
+    IEnumerator PlaySoundFall()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        SoundManager.Instance.PlaySound("Fall");
     }
 }
