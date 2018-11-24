@@ -19,10 +19,10 @@ public class PlayerMove : MonoBehaviour
     private bool isUsedHurtEffect = false;
 
     public GameObject flashPanel; //번쩍하는 패널
-    public GameObject endPanel; //게임 종료시 출력되는 패널
+    public GameObject endPanel;   //게임 종료시 출력되는 패널
     private bool isShowEndPanel = false;
 
-    //준비 자세 관련
+    //듀토리얼 이후, idle 자세 관련
     public Sprite spriteIdle;
     public RuntimeAnimatorController animController;
 
@@ -70,8 +70,6 @@ public class PlayerMove : MonoBehaviour
                 flag = 1;
 
             transform.Translate(speed * flag * Vector3.up * Time.deltaTime);
-
-
         }
         else
         {
@@ -91,6 +89,7 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //번쩍이는 패널은 딱 한 번만 보여줌
         if (!isShowEndPanel)
         {
             isShowEndPanel = true;
@@ -101,6 +100,7 @@ public class PlayerMove : MonoBehaviour
         //게임오버
         DataManager.Instance.isGameOver = true;
 
+        //애니메이션 없애기
         Destroy(anim);
 
         if (collision.gameObject.CompareTag("Block"))
@@ -164,6 +164,7 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    //코루틴 ---------------------------------------------------
     IEnumerator ChangeDieSprite()
     {
         yield return new WaitForSeconds(1f);

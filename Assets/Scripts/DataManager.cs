@@ -35,5 +35,6 @@ public class DataManager : MonoBehaviour
     //블럭, 바닥 움직임 속도
     public float moveSpeed = 3f;
 
+    //재시작 여부 체크
     public bool isRestart = false;
 }

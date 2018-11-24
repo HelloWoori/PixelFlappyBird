@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        //재시작인 경우, 튜토리얼 생략 후 바로 게임 시작
         if (!DataManager.Instance.isRestart)
         {
             DataManager.Instance.isGameOver = true; //true로 해서 블럭, 바닥 등 움직이지 않도록
@@ -77,12 +78,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Main");
     }
 
+    //튜토리얼 이후에 점수 계산 및 블럭생성
     public void StartGame()
     {
         scorePanel.SetActive(true);
         StartCoroutine(MakeBlock());
     }
 
+    //코루틴 -----------------------------------------------------------
     IEnumerator MakeBlock()
     {
         do
