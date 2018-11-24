@@ -15,7 +15,7 @@ public class PlayerMove : MonoBehaviour
     public float jumpPower = 5f;
     public float smooth = 2.0f;
 
-    public GameObject spriteHurtEffect;
+    public GameObject hurtEffect;
     private bool isUsedHurtEffect = false;
     public GameObject endPanel; //게임 종료시 출력되는 패널
 
@@ -100,8 +100,8 @@ public class PlayerMove : MonoBehaviour
             {
                 isUsedHurtEffect = true;
 
-                spriteHurtEffect.transform.position = collision.contacts[0].point;
-                spriteHurtEffect.SetActive(true);
+                hurtEffect.transform.position = collision.contacts[0].point;
+                hurtEffect.SetActive(true);
                 StartCoroutine(ChangeVisiable());
             }
 
@@ -173,6 +173,6 @@ public class PlayerMove : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
 
-        spriteHurtEffect.SetActive(false);
+        hurtEffect.SetActive(false);
     }
 }
